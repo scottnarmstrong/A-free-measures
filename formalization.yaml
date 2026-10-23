@@ -1,0 +1,250 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "The structure of A-free measures and applications (De Philippis-Rindler), formalized in Lean 4"
+  description: >-
+    A complete Lean 4 formalization of G. De Philippis and F. Rindler, On the
+    structure of A-free measures and applications (Ann. of Math. 184 (2016)).
+    Every theorem, lemma and corollary of the paper is formalized and proved,
+    together with Remarks 1.3, 1.4 and 1.11. The main theorem says that if a
+    finite vector measure mu solves a linear constant-coefficient PDE system
+    A mu = 0, then at |mu|^s-almost every point its polar dmu/d|mu| lies in the
+    wave cone of A. It is proved for operators of every order, with a measure
+    on the right-hand side (Remark 1.3) and with smooth variable coefficients
+    (Remark 1.4). The applications are Alberti's rank-one
+    theorem for BV functions and its version for higher derivatives, the polar
+    structure of BD functions, the dimensional structure of normal currents
+    (Corollary 1.9, Theorem 1.10, Remark 1.11, Corollaries 1.12 and 1.13), the
+    converse of Rademacher's theorem (a measure for which every Lipschitz
+    function is differentiable almost everywhere is absolutely continuous), and
+    the absolute continuity of the mass of top-dimensional metric currents in
+    R^d. Lemmas 2.1 (compactness of Bessel potentials) and 3.1 (the
+    decomposability bundle) are proved too. The inputs the paper cites from
+    Alberti-Marchese, Schioppa and Ambrosio-Kirchheim are not assumed: the
+    parts the proofs need are proved in the library, as is the Fourier
+    analysis (Hormander-Mihlin multipliers and their weak type (1,1) bound).
+    Every statement is checked against a Mathlib-only restatement with
+    leanprover/comparator, and the library uses only Lean's standard axioms.
+  authors:
+    - "Scott Armstrong"
+  responsible_maintainers:
+    - "Scott Armstrong"
+  license: "Apache-2.0"
+  funding:
+    - "Scott Armstrong was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme, grant agreement No. 101200828."
+
+classification:
+  arxiv: ["math.AP", "math.CA"]
+  msc2020: ["35D30", "28B05", "42B37", "49Q15"]
+
+sources:
+  - title: "On the structure of A-free measures and applications"
+    authors:
+      - "Guido De Philippis"
+      - "Filip Rindler"
+    type: "paper"
+    relationship: "formalizes"
+    note: >-
+      Annals of Mathematics 184 (2016), 1017-1039,
+      doi:10.4007/annals.2016.184.3.10, arXiv:1601.06543 (v2, whose numbering
+      the formalization cites). Misprints, gaps and the places where the
+      formalization follows a different route are listed in
+      docs/ERRATA-AND-DEVIATIONS.md.
+    author_endorsement: "not-contacted"
+  - title: "On the differentiability of Lipschitz functions with respect to arbitrary measures"
+    authors:
+      - "Giovanni Alberti"
+      - "Andrea Marchese"
+    type: "paper"
+    relationship: "background"
+    note: >-
+      Geom. Funct. Anal. 26 (2016), arXiv:1408.2379 (v2). The decomposability
+      bundle, the perturbation and dichotomy lemmas of Sections 4 and 7 and the
+      non-differentiability direction of Theorem 1.1 are formalized and proved
+      in the library, as needed for DPR Theorem 1.14 and Lemma 3.1.
+    author_endorsement: "not-contacted"
+  - title: "Currents in metric spaces"
+    authors:
+      - "Luigi Ambrosio"
+      - "Bernd Kirchheim"
+    type: "paper"
+    relationship: "background"
+    note: >-
+      Acta Math. 185 (2000). Metric functionals, the mass and metric currents
+      in R^d (Definitions 2.1, 2.2, 2.6 and 3.1), the chain rule and
+      alternation of Theorem 3.5 and the comparison with flat chains of
+      Section 11 are formalized and proved in the library, as needed for DPR
+      Theorem 1.15.
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/scottnarmstrong/EllipticRegularityLean"
+    relationship: "builds-on"
+    note: >-
+      Supplies the coordinate model Vec d of R^d with its Euclidean norm,
+      coordinate derivatives and Euclidean balls, and the weak type (1,1)
+      estimate for the gradient of the Newtonian potential used in the
+      first-order case of Theorem 1.1; pinned as a Lake dependency at commit
+      1e29da02bcc6e3c2359a5b8e0559e76d02ec4002.
+
+status:
+  scope: >-
+    Formalized and proved: the 25 theorems of AFreeStatements/, which cover
+    every theorem, lemma and corollary of the paper (Theorems 1.1, 1.5-1.7,
+    1.10, 1.14 and 1.15, Corollaries 1.8, 1.9, 1.12 and 1.13, Lemmas 2.1 and
+    3.1; Lemma 2.2 enters as a step of the proofs) and Remarks 1.3, 1.4 and
+    1.11 (Remark 1.2 is not formalized), the agreement of the real wave cones with the paper's
+    complex-symbol definition, and the existence of the mass of a metric
+    functional and of the decomposability bundle. The set equality
+    M^met_d(R^d) = F_d(R^d) of Theorem 1.15 is formalized for compactly
+    supported currents, as in Ambrosio-Kirchheim, Theorem 11.1.
+  sorry_count: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "claude-opus-5-5"
+        - "claude-sonnet-5-5"
+        - "claude-fable-5-1"
+      framework: >-
+        Claude Code (Anthropic). Claude Opus 5.5 coordinated the work: it
+        wrote proof outlines from the paper and the cited literature, planned
+        bounded proof tasks, assigned them to parallel agents and carried out
+        statement and proof audits. The Lean code was written by Claude Opus 5.5
+        and Claude Sonnet 5.5 subagents. Claude Fable 5.1 independently reviewed
+        the documentation, the citations, the errata and the comparator
+        challenge.
+      tool_setup: >-
+        Lake builds with Lean and Mathlib v4.35.0-rc2 and EllipticRegularityLean
+        at a pinned revision. The main statements were approved by the author
+        before their proofs; each completed proof of a main statement received
+        a separate audit. The Mathlib-only restatement was checked with
+        leanprover/comparator (Lean kernel and nanoda replay).
+      cost:
+        hardware: "one 16-CPU Linux machine"
+  notes: >-
+    Lean code was written with the listed AI models under the author's
+    supervision. The Lean kernel checks the formal proofs; the library contains
+    no sorry and no custom axiom.
+
+review:
+  status: "author-approved-statements"
+  reviewers:
+    - "Scott Armstrong"
+  notes: >-
+    The author approved the main statements. Separate agent reviews checked
+    the statements against the paper and audited the proofs of the main
+    statements. This is not external peer review.
+
+alignment:
+  namespace: "AFree"
+  statements:
+    - source: "DPR Theorem 1.1, operators of order at most one"
+      lean: "AFree.polar_mem_waveConeFirstOrder"
+      module: "AFreeStatements.FirstOrderMain"
+      status: "proved"
+    - source: "DPR Section 2.1, the wave cone of a first-order operator"
+      lean: "AFree.mem_waveConeFirstOrder_iff_complexSymbol"
+      module: "AFreeStatements.WaveConeBridge"
+      status: "proved"
+    - source: "DPR Theorem 1.1, operators of order k"
+      lean: "AFree.polar_mem_waveCone"
+      module: "AFreeStatements.GeneralMain"
+      status: "proved"
+    - source: "DPR Section 2.1, the wave cone of an operator of order k"
+      lean: "AFree.mem_waveCone_iff_complexSymbol"
+      module: "AFreeStatements.WaveConeBridgeK"
+      status: "proved"
+    - source: "DPR Remark 1.3"
+      lean: "AFree.polar_mem_waveCone_of_eq_measure"
+      module: "AFreeStatements.MeasureRhs"
+      status: "proved"
+    - source: "DPR Remark 1.4"
+      lean: "AFree.polar_mem_waveCone_var"
+      module: "AFreeStatements.VariableCoeff"
+      status: "proved"
+    - source: "DPR Theorem 1.5 (Alberti's rank-one theorem)"
+      lean: "AFree.polar_lebesgueSingularPart_eq_tensor"
+      module: "AFreeStatements.Alberti"
+      status: "proved"
+    - source: "DPR Theorem 1.6"
+      lean: "AFree.polar_lebesgueSingularPart_eq_tensorPow"
+      module: "AFreeStatements.TensorPow"
+      status: "proved"
+    - source: "DPR Theorem 1.7"
+      lean: "AFree.polar_lebesgueSingularPart_eq_symmTensor"
+      module: "AFreeStatements.BD"
+      status: "proved"
+    - source: "DPR Corollary 1.8"
+      lean: "AFree.polar_lebesgueSingularPart_eq_symmTensor_orth"
+      module: "AFreeStatements.BDOrth"
+      status: "proved"
+    - source: "DPR Corollary 1.9"
+      lean: "AFree.exists_hyperplane_of_boundaryless"
+      module: "AFreeStatements.Hyperplane"
+      status: "proved"
+    - source: "DPR Theorem 1.10"
+      lean: "AFree.exists_covector_interiorProduct_eq_zero"
+      module: "AFreeStatements.CovectorKernel"
+      status: "proved"
+    - source: "DPR Theorem 1.10, equivalent formulation"
+      lean: "AFree.interiorProduct_eq_zero_iff_mem_kvecSpan"
+      module: "AFreeStatements.InteriorProductKernel"
+      status: "proved"
+    - source: "DPR Remark 1.11, linear algebra"
+      lean: "AFree.isSimpleKVec_of_mem_kvecSpan"
+      module: "AFreeStatements.SimpleLinAlg"
+      status: "proved"
+    - source: "DPR Remark 1.11, simplicity almost everywhere"
+      lean: "AFree.ae_isSimpleKVec_of_isLocNormalCurrent"
+      module: "AFreeStatements.SimpleAE"
+      status: "proved"
+    - source: "DPR Remark 1.11, the example in R^5"
+      lean: "AFree.not_ae_isSimpleKVec_example"
+      module: "AFreeStatements.SimpleCounterexample"
+      status: "proved"
+    - source: "DPR Corollary 1.12"
+      lean: "AFree.absolutelyContinuous_of_span_eq_top"
+      module: "AFreeStatements.SpanAbsCont"
+      status: "proved"
+    - source: "DPR Corollary 1.13"
+      lean: "AFree.rank_polar_le_of_div_eq"
+      module: "AFreeStatements.DivRank"
+      status: "proved"
+    - source: "DPR Lemma 2.1"
+      lean: "AFree.exists_compact_besselPotential"
+      module: "AFreeStatements.BesselCompact"
+      status: "proved"
+    - source: "DPR Theorem 1.14"
+      lean: "AFree.absolutelyContinuous_of_ae_differentiableAt"
+      module: "AFreeStatements.RademacherConverse"
+      status: "proved"
+    - source: "AM Section 2.7, existence of the decomposability bundle"
+      lean: "AFree.exists_isDecompBundle"
+      module: "AFreeStatements.DecompBundleExists"
+      status: "proved"
+    - source: "DPR Lemma 3.1"
+      lean: "AFree.decompBundle_eq_top_iff"
+      module: "AFreeStatements.DecompBundleIff"
+      status: "proved"
+    - source: "AK Definition 2.6, existence of the mass"
+      lean: "AFree.exists_isAKMass"
+      module: "AFreeStatements.AKMassExists"
+      status: "proved"
+    - source: "DPR Theorem 1.15, absolute continuity of the mass"
+      lean: "AFree.absolutelyContinuous_of_isAKMass"
+      module: "AFreeStatements.MetricCurrentAC"
+      status: "proved"
+    - source: "DPR Theorem 1.15, metric currents and flat chains (compact support)"
+      lean: "AFree.isTopFlatChain_iff_isMetricCurrent"
+      module: "AFreeStatements.FlatChain"
+      status: "proved"
+
+acknowledgements: >-
+  Built on Lean 4, Mathlib, Lake, EllipticRegularityLean, leanprover/comparator
+  and NanoDa. Scott Armstrong was supported by the European Research Council
+  (ERC) under the European Union's Horizon Europe research and innovation
+  programme, grant agreement No. 101200828.

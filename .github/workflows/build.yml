@@ -1,0 +1,118 @@
+name: Build and verify
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and axiom audit
+    runs-on: ubuntu-24.04
+    # The first run on an empty cache compiles the EllipticRegularityLean modules used and the
+    # whole library.
+    timeout-minutes: 360
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Free runner disk space
+        run: |
+          set -Eeuo pipefail
+          if [[ "${RUNNER_ENVIRONMENT:-}" == github-hosted ]]; then
+            sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+            sudo docker image prune --all --force > /dev/null || true
+          fi
+          df -h .
+          available_kib="$(df -Pk . | awk 'NR==2 {print $4}')"
+          test "$available_kib" -ge 20971520
+
+      - name: Set up Lean and Mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          build: false
+          use-mathlib-cache: true
+
+      - name: Restore project and dependency build artifacts
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .lake/build
+            .lake/packages/elliptic_regularity/.lake/build
+          key: lake-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: |
+            lake-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+            lake-cmp-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-
+
+      # The library and the 25 statements must build without `sorry` and without warnings.
+      - name: Build the library and the statements
+        timeout-minutes: 300
+        run: |
+          set -o pipefail
+          lake build 2>&1 | tee library-build.log
+          lake build AFreeStatements 2>&1 | tee -a library-build.log
+          if grep -E "^(warning|error):" library-build.log | grep -vE "PDEFoundation|CZStatements"; then
+            echo "The library build reported a warning or an error."
+            exit 1
+          fi
+
+      # The comparator challenge, its solution and the axiom audit (not default targets). The
+      # challenge contains one intentional `sorry` per theorem.
+      - name: Build the challenge library
+        run: |
+          set -o pipefail
+          lake build Challenges 2>&1 | tee audit-build.log
+          if grep -E "declaration uses .sorry." audit-build.log \
+               | grep -vE "Challenges/AFreeMeasures/Challenge\.lean:[0-9]+:[0-9]+: declaration uses .sorry."; then
+            echo "A sorry outside the challenge statements was reported."
+            exit 1
+          fi
+
+      # Every Lean file is a module; no sorry, custom axiom or heartbeat override outside the
+      # challenge; no file over 10000 lines.
+      - name: Source hygiene
+        run: |
+          python3 - <<'PY'
+          import re, subprocess, sys
+          bad = 0
+          for f in subprocess.check_output(["git", "ls-files", "*.lean"], text=True).split():
+              s = open(f, encoding="utf-8").read()
+              code = re.sub(r"--[^\n]*", "", re.sub(r"/-.*?-/", "", s, flags=re.S))
+              if f != "lakefile.lean" and not re.match(r"\s*module\b", code):
+                  print(f"{f}: not a module"); bad = 1
+              if s.count("\n") > 10000:
+                  print(f"{f}: over 10000 lines"); bad = 1
+              if not f.startswith("Challenges/") and re.search(r"\bsorry\b|^\s*axiom\s|maxHeartbeats", code, re.M):
+                  print(f"{f}: sorry, axiom or heartbeat override"); bad = 1
+          sys.exit(bad)
+          PY
+
+      - name: Axiom audit
+        run: |
+          set -o pipefail
+          lake env lean Challenges/AFreeMeasures/AxiomsAudit.lean 2>&1 | tee axioms-audit.log
+          python3 scripts/check_axioms.py axioms-audit.log Challenges/AFreeMeasures/AxiomsAudit.lean
+
+      - name: Save project and dependency build artifacts
+        if: always() && steps.cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .lake/build
+            .lake/packages/elliptic_regularity/.lake/build
+          key: lake-build-${{ hashFiles('lean-toolchain', 'lake-manifest.json') }}-${{ github.sha }}

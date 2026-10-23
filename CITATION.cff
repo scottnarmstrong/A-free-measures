@@ -1,0 +1,54 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite it as below."
+title: "The structure of A-free measures: a Lean 4 formalization of De Philippis and Rindler"
+type: software
+repository-code: "https://github.com/scottnarmstrong/A-free-measures"
+abstract: >-
+  A machine-checked Lean 4 and Mathlib formalization of G. De Philippis and
+  F. Rindler, On the structure of A-free measures and applications (Ann. of
+  Math. 2016). Every theorem, lemma and corollary of the paper is formalized
+  and proved, with Remarks 1.3, 1.4 and 1.11: the main theorem, that the
+  polar of an A-free measure lies in the wave cone of A at almost every point
+  of the singular part, for operators of every order, with
+  a measure on the right-hand side and with variable coefficients; Alberti's
+  rank-one theorem and its versions for higher derivatives and for BD
+  functions; the structure of normal currents; the converse of Rademacher's
+  theorem; and the absolute continuity of top-dimensional metric currents.
+  The results of Alberti-Marchese and Ambrosio-Kirchheim that the proofs use
+  are proved too. The library contains no sorry and no custom axiom.
+authors:
+  - family-names: Armstrong
+    given-names: Scott
+keywords:
+  - Lean
+  - mathlib
+  - formal verification
+  - geometric measure theory
+  - A-free measures
+  - normal currents
+  - Rademacher theorem
+license: Apache-2.0
+references:
+  - type: article
+    title: "On the structure of A-free measures and applications"
+    authors:
+      - family-names: De Philippis
+        given-names: Guido
+      - family-names: Rindler
+        given-names: Filip
+    journal: "Annals of Mathematics"
+    volume: 184
+    issue: 3
+    start: 1017
+    end: 1039
+    year: 2016
+    doi: "10.4007/annals.2016.184.3.10"
+    url: "https://arxiv.org/abs/1601.06543"
+    notes: "The paper formalized here."
+  - type: software
+    title: "EllipticRegularityLean"
+    authors:
+      - family-names: Armstrong
+        given-names: Scott
+    repository-code: "https://github.com/scottnarmstrong/EllipticRegularityLean"
+    notes: "Lean dependency: the coordinate model of R^d and the weak type (1,1) estimate for the gradient of the Newtonian potential."
