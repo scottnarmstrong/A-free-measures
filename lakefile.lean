@@ -36,6 +36,6 @@ lean_lib «AFreeStatements» where
 /-- The comparator challenge: the 25 statements with every definition they use, from Mathlib only
 (`Challenge.lean`), their proofs from this library (`Solution.lean`) and the axiom audit. Check with
 `scripts/verify_comparator.sh`. -/
-lean_lib «Challenges» where
-  globs := #[.submodules `Challenges]
+lean_lib «AFreeChallenges» where
+  globs := #[.submodules `AFreeChallenges]
   leanOptions := projectLeanOptions

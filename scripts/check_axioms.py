@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the output of `lake env lean Challenges/AFreeMeasures/AxiomsAudit.lean`.
+"""Check the output of `lake env lean AFreeChallenges/AFreeMeasures/AxiomsAudit.lean`.
 
 usage: check_axioms.py LOG AUDIT_SOURCE
 Every declaration named by a `#print axioms` line of AUDIT_SOURCE must be reported, and each may

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Run leanprover/comparator on Challenges/AFreeMeasures/comparator.json, including NanoDa.
+# Run leanprover/comparator on AFreeChallenges/AFreeMeasures/comparator.json, including NanoDa.
 # Verification script, released under Apache-2.0.
 # Usage: scripts/verify_comparator.sh
 #
@@ -16,7 +16,7 @@ if [ "$#" -ne 0 ]; then
   exit 2
 fi
 root=$(cd "$(dirname "$0")/.." && pwd)
-config=Challenges/AFreeMeasures/comparator.json
+config=AFreeChallenges/AFreeMeasures/comparator.json
 cache=${AFREE_COMPARATOR_CACHE:-"$HOME/.cache/a-free-measures-comparator"}
 comparator_commit=32bd61da1d68fbaa310234964e9b820b03a0f82f
 lean4export_commit=6cea97789dc088ea47fcea15692db85685aedac5
@@ -64,8 +64,8 @@ mapfile -t modules < <(python3 -I -c \
   "$config")
 [ ${#modules[@]} -eq 2 ] || { echo "error: invalid comparator config" >&2; exit 1; }
 # Discard only the challenge library's artifacts so both environments are freshly built.
-rm -rf "$root/.lake/build/lib/lean/Challenges" "$root/.lake/build/ir/Challenges"
-echo "=== comparator: Challenges/AFreeMeasures"
+rm -rf "$root/.lake/build/lib/lean/AFreeChallenges" "$root/.lake/build/ir/AFreeChallenges"
+echo "=== comparator: AFreeChallenges/AFreeMeasures"
 # Prebuild with bounded parallelism (this also builds the library if it is not yet built);
 # comparator's sandboxed builds then find warm artifacts.
 prebuild=(lake build "${modules[@]}")
@@ -73,12 +73,12 @@ if [ -n "${COMPARATOR_BUILD_LOCK:-}" ]; then
   prebuild=(flock "$COMPARATOR_BUILD_LOCK" "${prebuild[@]}")
 fi
 LEAN_NUM_THREADS=${LEAN_NUM_THREADS:-2} nice -n 10 "${prebuild[@]}" < /dev/null || {
-  echo "=== Challenges/AFreeMeasures: FAIL (build)"; exit 1;
+  echo "=== AFreeChallenges/AFreeMeasures: FAIL (build)"; exit 1;
 }
 if COMPARATOR_LEAN4EXPORT="$lean4export" COMPARATOR_NANODA="$nanoda" \
   COMPARATOR_LANDRUN="$landrun" LEAN_NUM_THREADS=${LEAN_NUM_THREADS:-2} \
   nice -n 10 lake env "$comparator" "$config"; then
-  echo "=== Challenges/AFreeMeasures: PASS"
+  echo "=== AFreeChallenges/AFreeMeasures: PASS"
 else
-  echo "=== Challenges/AFreeMeasures: FAIL"; exit 1
+  echo "=== AFreeChallenges/AFreeMeasures: FAIL"; exit 1
 fi

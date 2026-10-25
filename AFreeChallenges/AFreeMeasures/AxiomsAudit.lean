@@ -31,7 +31,7 @@ public import AFreeStatements.FlatChain
 
 The axioms used by the 25 main theorems. Each must be exactly `propext`, `Classical.choice` and
 `Quot.sound`; `scripts/check_axioms.py` checks the output of
-`lake env lean Challenges/AFreeMeasures/AxiomsAudit.lean`.
+`lake env lean AFreeChallenges/AFreeMeasures/AxiomsAudit.lean`.
 -/
 
 #print axioms AFree.mem_waveConeFirstOrder_iff_complexSymbol

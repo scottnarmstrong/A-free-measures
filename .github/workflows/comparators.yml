@@ -1,7 +1,7 @@
 name: Comparators
 
 # Runs leanprover/comparator, through scripts/verify_comparator.sh, on
-# Challenges/AFreeMeasures/comparator.json. For each one it checks that the solution
+# AFreeChallenges/AFreeMeasures/comparator.json. For each one it checks that the solution
 # proves a theorem whose statement, with its whole dependency closure, is
 # identical to the Mathlib-only challenge's, that the proof uses only the
 # permitted axioms, and that both the Lean kernel and the independent nanoda
@@ -91,9 +91,9 @@ jobs:
         timeout-minutes: 300
         run: |
           set -o pipefail
-          rm -rf .lake/build/lib/lean/Challenges .lake/build/ir/Challenges
+          rm -rf .lake/build/lib/lean/AFreeChallenges .lake/build/ir/AFreeChallenges
           lake build
-          lake build Challenges
+          lake build AFreeChallenges
 
       - name: Restore verification tools
         id: tools-cache
@@ -156,7 +156,7 @@ jobs:
           rm -rf "$workdir" "$logs"
           mkdir -p "$workdir" "$logs"
           trap 'rm -rf "$workdir"' EXIT
-          cfg=Challenges/AFreeMeasures/comparator.json
+          cfg=AFreeChallenges/AFreeMeasures/comparator.json
           test -f "$cfg" || { echo "missing $cfg"; exit 1; }
           mkdir -p "$workdir/run"
           if TMPDIR="$workdir/run" scripts/verify_comparator.sh 2>&1 | tee "$logs/comparator.log" \

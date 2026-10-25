@@ -37,7 +37,7 @@ finite index type `ι`; a measure on `Ω` is one whose total variation vanishes 
 variations, polars, `k`-vectors, Lipschitz constants, diameters and `𝓗¹` are taken for the
 Euclidean norm.
 
-All definitions are in one module, so that `Challenges/AFreeMeasures/Challenge.lean`, which
+All definitions are in one module, so that `AFreeChallenges/AFreeMeasures/Challenge.lean`, which
 restates them in one file, elaborates to the same constants.
 -/
 

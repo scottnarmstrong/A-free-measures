@@ -100,7 +100,7 @@ Two independent checks accompany the build:
 
 - **Axiom audit.** `scripts/check_axioms.py` checks that each of the 25 theorems above depends only
   on `propext`, `Classical.choice` and `Quot.sound`.
-- **Comparator.** [`Challenges/AFreeMeasures/Challenge.lean`](Challenges/AFreeMeasures/Challenge.lean)
+- **Comparator.** [`AFreeChallenges/AFreeMeasures/Challenge.lean`](AFreeChallenges/AFreeMeasures/Challenge.lean)
   restates the 25 theorems with every definition they use, importing Mathlib only.
   [leanprover/comparator](https://github.com/leanprover/comparator) checks that the theorems proved
   by the library (`Solution.lean`) have exactly these statements. It compares the statements
@@ -118,16 +118,16 @@ is selected by `lean-toolchain`. Dependencies, pinned in `lake-manifest.json`:
   Newtonian potential used in the first-order case of Theorem 1.1.
 
 ```bash
-lake exe cache get     # Mathlib build artifacts
-lake build             # the library AFree and the 25 main theorems in AFreeStatements
-lake build Challenges  # the comparator challenge, its solution and the axiom audit
+lake exe cache get          # Mathlib build artifacts
+lake build                  # the library AFree and the 25 main theorems in AFreeStatements
+lake build AFreeChallenges  # the comparator challenge, its solution and the axiom audit
 ```
 
 Then the checks:
 
 ```bash
-lake env lean Challenges/AFreeMeasures/AxiomsAudit.lean > axioms.log 2>&1
-python3 scripts/check_axioms.py axioms.log Challenges/AFreeMeasures/AxiomsAudit.lean
+lake env lean AFreeChallenges/AFreeMeasures/AxiomsAudit.lean > axioms.log 2>&1
+python3 scripts/check_axioms.py axioms.log AFreeChallenges/AFreeMeasures/AxiomsAudit.lean
 scripts/verify_comparator.sh  # needs landrun and nanoda_bin; see the script header
 ```
 
@@ -146,7 +146,7 @@ hosted runner, with empty caches, takes considerably longer.
   - `Measure/`, `Analysis/`, `Algebra/`: measure theory, analysis and `k`-vectors.
   - `Curves/`, `Rademacher/`: cone-null sets, Rainwater's lemma, the decomposability bundle and Theorem 1.14.
   - `MetricCurrents/`, `TopCurrents/`: metric currents and Theorem 1.15.
-- `Challenges/AFreeMeasures/`: the comparator challenge, its solution and the axiom audit.
+- `AFreeChallenges/AFreeMeasures/`: the comparator challenge, its solution and the axiom audit.
 - `docs/`: the proof map, and the errata and deviations.
 
 ## Author, AI use and acknowledgements

@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenges.AFreeMeasures.Challenge",
-  "solution_module": "Challenges.AFreeMeasures.Solution",
+  "challenge_module": "AFreeChallenges.AFreeMeasures.Challenge",
+  "solution_module": "AFreeChallenges.AFreeMeasures.Solution",
   "theorem_names": [
     "AFree.mem_waveConeFirstOrder_iff_complexSymbol",
     "AFree.polar_mem_waveConeFirstOrder",
